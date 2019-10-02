@@ -1,15 +1,26 @@
 # Bash rpcs for Ethereum
 
-## Usage
-
 ### personal_sendTransaction
 
-#### sh personal_sendTransaction_eth.sh wallet1_value wallet2_value
+#### Usage: 
+##### sh personal_sendTransaction_eth.sh [-s|--server <arg>] [-f|--wallet_from <arg>] [-t|--wallet_to <arg>] [-v|--value <arg>] [-h|--help]
+##### -s, --server: optional argument (localhost:8545)
+##### -f, --wallet_from: optional argument (0x6B0c56d1Ad5144b4d37fa6e27DC9afd5C2435c3B)
+##### -t, --wallet_to: optional argument (0x00E3d1Aa965aAfd61217635E5f99f7c1e567978f)
+##### -v, --value: optional argument (0xde0b6b3a7640000)
+##### -h, --help: Prints help
+
 
 
 ### eth_getBalance
 
-#### sh eth_getBalance.sh wallet_value tag_value
+#### Usage: 
+##### sh eth_getBalance.sh [-w|--wallet <arg>] [-t|--tag <arg>] [-s|--server <arg>] [-h|--help]
+##### -w, --wallet: optional argument (0x00E3d1Aa965aAfd61217635E5f99f7c1e567978f)
+##### -t, --tag: optional argument (latest)
+##### -s, --server: optional argument (localhost:8545)
+##### -h, --help: Prints help
+
 
 ##### wallet_value - address to check for balance.
 ##### tag_value - integer block number, or the string "latest", "earliest" or "pending", see the default block parameter
