@@ -17,6 +17,9 @@ _arg_server=
 _arg_wallet_from=
 _arg_wallet_to=
 _arg_value=
+_arg_gas=
+_arg_gasPrice=
+_arg_data=
 print_help()
 {
 	printf '%s\n' "Ethereum JSON RPC API"
@@ -25,6 +28,9 @@ print_help()
 	printf '\t%s\n' "-f, --wallet_from: optional argument (0x6B0c56d1Ad5144b4d37fa6e27DC9afd5C2435c3B)"
 	printf '\t%s\n' "-t, --wallet_to: optional argument (0x00E3d1Aa965aAfd61217635E5f99f7c1e567978f)"
 	printf '\t%s\n' "-v, --value: optional argument (0xde0b6b3a7640000)"
+	printf '\t%s\n' "-g, --gas: optional argument (0x76c0)"
+	printf '\t%s\n' "-p, --gasprice: optional argument (0x9184e72a000)"
+	printf '\t%s\n' "-d, --data: optional argument (0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675)"
 	printf '\t%s\n' "-h, --help: Prints help"
 }
 parse_commandline()
@@ -77,6 +83,42 @@ parse_commandline()
 			-v*)
 				_arg_value="${_key##-v}"
 				;;
+
+			-d|--data)
+				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
+				_arg_data="$2"
+				shift
+				;;
+			--data=*)
+				_arg_data="${_key##--data=}"
+				;;
+			-d*)
+				_arg_data="${_key##-d}"
+				;;
+
+			-g|--gas)
+				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
+				_arg_gas="$2"
+				shift
+				;;
+			--gas=*)
+				_arg_gas="${_key##--gas=}"
+				;;
+			-g*)
+				_arg_gas="${_key##-g}"
+				;;
+
+			-p|--gasprice)
+				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
+				_arg_gasPrice="$2"
+				shift
+				;;
+			--gasprice=*)
+				_arg_gasPrice="${_key##--gasprice=}"
+				;;
+			-p*)
+				_arg_gasPrice="${_key##-p}"
+				;;
 			
 			-h|--help)
 				print_help
@@ -117,13 +159,34 @@ if [ -z "$_arg_value" ]
 fi
 
 
+if [ -z "$_arg_gas" ]
+  then
+    _arg_gas="0x76c0"
+fi
+
+
+if [ -z "$_arg_gasPrice" ]
+  then
+    _arg_gasPrice="0x9184e72a000"
+fi
+
+
+if [ -z "$_arg_data" ]
+  then
+    _arg_data="0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
+fi
+
+
 
 # Now call all the functions defined above that are needed to get the job done
 parse_commandline "$@"
 
-#echo "Value of --server: $_arg_server"
-#echo "Value of --wallet_from: $_arg_wallet_from"
-#echo "Value of --wallet_to: $_arg_wallet_to"
-#echo "Value of --value: $_arg_value"
+echo "Value of --server: $_arg_server"
+echo "Value of --wallet_from: $_arg_wallet_from"
+echo "Value of --wallet_to: $_arg_wallet_to"
+echo "Value of --value: $_arg_value"
+echo "Value of --gas: $_arg_gas"
+echo "Value of --gasprice: $_arg_gasPrice"
+echo "Value of --data: $_arg_data"
 
-curl --data '{"jsonrpc":"2.0","method":"personal_sendTransaction","params":[{"from":'$_arg_wallet_from',"to":'$_arg_wallet_to',"value":'$_arg_value'}, ""],"id":0}' -H "Content-Type: application/json" -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{"from":'$_arg_wallet_from',"to":'$_arg_wallet_to',"value":'$_arg_value'},"gas":'$_arg_gas'],"id":0}' -H "Content-Type: application/json" -X POST $_arg_server

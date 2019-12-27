@@ -1,4 +1,4 @@
-# Bash rpcs for Ethereum
+# Ethereum JSON RPC API Wrapper
 
 ### personal_sendTransaction
 

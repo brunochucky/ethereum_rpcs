@@ -14,15 +14,14 @@ begins_with_short_option()
 	test "$all_short_options" = "${all_short_options/$first_option/}" && return 1 || return 0
 }
 _arg_server=
-_arg_wallet=
-_arg_tag=
+_arg_id=
+_arg_data=
 print_help()
 {
 	printf '%s\n' "Ethereum JSON RPC API"
-	printf 'Usage: %s [-w|--wallet <arg>] [-t|--tag <arg>] [-s|--server <arg>] [-h|--help]\n' "$0"
-	printf '\t%s\n' "-w, --wallet: optional argument (0x00E3d1Aa965aAfd61217635E5f99f7c1e567978f)"
-	printf '\t%s\n' "-t, --tag: optional argument (latest)"
-	printf '\t%s\n' "-s, --server: optional argument (localhost:8545)"
+	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-h|--help]\n' "$0"
+	printf '\t%s\n' "-i, --id: optional argument (64)"
+	printf '\t%s\n' "-d, --data: optional argument (0x68656c6c6f20776f726c64)"
 	printf '\t%s\n' "-h, --help: Prints help"
 }
 parse_commandline()
@@ -31,28 +30,30 @@ parse_commandline()
 	do
 		_key="$1"
 		case "$_key" in
-			-w|--wallet)
+			-i|--id)
 				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
-				_arg_wallet="$2"
+				_arg_id="$2"
 				shift
 				;;
-			--wallet=*)
-				_arg_wallet="${_key##--wallet=}"
+			--id=*)
+				_arg_id="${_key##--id=}"
 				;;
-			-w*)
-				_arg_wallet="${_key##-w}"
+			-i*)
+				_arg_id="${_key##-i}"
 				;;
-			-t|--tag)
+
+			-d|--data)
 				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
-				_arg_tag="$2"
+				_arg_data="$2"
 				shift
 				;;
-			--tag=*)
-				_arg_tag="${_key##--tag=}"
+			--data=*)
+				_arg_data="${_key##--data=}"
 				;;
-			-t*)
-				_arg_tag="${_key##-t}"
+			-d*)
+				_arg_data="${_key##-d}"
 				;;
+
 			-s|--server)
 				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
 				_arg_server="$2"
@@ -83,14 +84,15 @@ parse_commandline()
 }
 
 
-if [ -z "$_arg_wallet" ]
+if [ -z "$_arg_id" ]
   then
-    _arg_wallet="0x00E3d1Aa965aAfd61217635E5f99f7c1e567978f"
+    _arg_id="64"
 fi
 
-if [ -z "$_arg_tag" ]
+
+if [ -z "$_arg_data" ]
   then
-    _arg_tag="latest"
+    _arg_data="0x68656c6c6f20776f726c64"
 fi
 
 if [ -z "$_arg_server" ]
@@ -101,8 +103,8 @@ fi
 # Now call all the functions defined above that are needed to get the job done
 parse_commandline "$@"
 
-#echo "Value of --wallet: $_arg_wallet"
-#echo "Value of --tag: $_arg_tag"
-#echo "Value of --server: $_arg_server"
+# echo "Value of --id: $_arg_id"
+# echo "Value of --data: $_arg_data"
+# echo "Value of --server: $_arg_server"
 
-curl --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["'$_arg_wallet'", "'$_arg_tag'"],"id":1}' -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"web3_sha3","params":["'$_arg_data'"],"id":"'$_arg_id'"}' -X POST $_arg_server
