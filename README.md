@@ -1,13 +1,16 @@
 # Ethereum JSON RPC API Wrapper
 
-### personal_sendTransaction
+### eth_sendTransaction
 
 #### Usage: 
-##### sh personal_sendTransaction_eth.sh [-s|--server <arg>] [-f|--wallet_from <arg>] [-t|--wallet_to <arg>] [-v|--value <arg>] [-h|--help]
+##### sh eth_sendTransaction.sh [-s|--server <arg>] [-f|--wallet_from <arg>] [-t|--wallet_to <arg>] [-v|--value <arg>] [-g|--gas <arg>] [-p|--gasprice <arg>] [-d|--data <arg>] [-h|--help]
 ##### -s, --server: optional argument (localhost:8545)
 ##### -f, --wallet_from: optional argument (0x0690786F0890F5DC6CF6f01772ECBdFc8E22f514)
 ##### -t, --wallet_to: optional argument (0x0690786F0890F5DC6CF6f01772ECBdFc8E22f514)
 ##### -v, --value: optional argument (0xde0b6b3a7640000)
+##### -g, --gas: optional argument (0x76c0)
+##### -p, --gasprice: optional argument (0x9184e72a000)
+##### -d, --data: optional argument (0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675)
 ##### -h, --help: Prints help
 
 
