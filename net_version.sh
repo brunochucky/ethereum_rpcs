@@ -21,6 +21,7 @@ print_help()
 	printf '%s\n' "Ethereum JSON RPC API"
 	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-h|--help]\n' "$0"
 	printf '\t%s\n' "-i, --id: optional argument (67)"
+	printf '\t%s\n' "-s, --server: optional argument (localhost:8545)"
 	printf '\t%s\n' "-h, --help: Prints help"
 }
 parse_commandline()

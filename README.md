@@ -28,5 +28,33 @@
 ##### wallet_value - address to check for balance.
 ##### tag_value - integer block number, or the string "latest", "earliest" or "pending", see the default block parameter
 
+
+### web3_clientVersion
+
+#### Usage: 
+##### sh web3_clientVersion.sh [-i|--id <arg>] [-s|--server <arg>] [-h|--help]
+##### -i, --id: optional argument (67)
+##### -s, --server: optional argument (localhost:8545)
+##### -h, --help: Prints help
+
+### web3_sha3
+
+#### Usage: 
+##### sh web3_sha3.sh [-i|--id <arg>] [-d|--data <arg>] [-s|--server <arg>] [-h|--help]
+##### -i, --id: optional argument (64)
+##### -d, --data: optional argument (0x68656c6c6f20776f726c64)
+##### -s, --server: optional argument (localhost:8545)
+##### -h, --help: Prints help
+
+
+### net_version
+
+#### Usage: 
+##### sh net_version.sh [-i|--id <arg>] [-s|--server <arg>] [-h|--help]
+##### -i, --id: optional argument (64)
+##### -s, --server: optional argument (localhost:8545)
+##### -h, --help: Prints help
+
+
 ### Donate
 #### 0x0690786F0890F5DC6CF6f01772ECBdFc8E22f514

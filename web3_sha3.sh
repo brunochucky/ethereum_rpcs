@@ -22,6 +22,7 @@ print_help()
 	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-h|--help]\n' "$0"
 	printf '\t%s\n' "-i, --id: optional argument (64)"
 	printf '\t%s\n' "-d, --data: optional argument (0x68656c6c6f20776f726c64)"
+	printf '\t%s\n' "-s, --server: optional argument (localhost:8545)"
 	printf '\t%s\n' "-h, --help: Prints help"
 }
 parse_commandline()
