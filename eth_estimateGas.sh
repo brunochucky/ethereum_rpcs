@@ -9,7 +9,7 @@ die()
 }
 begins_with_short_option()
 {
-	local first_option all_short_options='sftvgpdnh'
+	local first_option all_short_options='sftvgpdh'
 	first_option="${1:0:1}"
 	test "$all_short_options" = "${all_short_options/$first_option/}" && return 1 || return 0
 }
@@ -20,7 +20,6 @@ _arg_value=
 _arg_gas=
 _arg_gasPrice=
 _arg_data=
-_arg_nonce=
 print_help()
 {
 	printf '%s\n' "Ethereum JSON RPC API"
@@ -32,7 +31,6 @@ print_help()
 	printf '\t%s\n' "-g, --gas: optional argument (0x76c0)"
 	printf '\t%s\n' "-p, --gasprice: optional argument (0x9184e72a000)"
 	printf '\t%s\n' "-d, --data: optional argument (0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675)"
-	printf '\t%s\n' "-n, --nonce: optional argument (0xde0b6b3a7640000)"
 	printf '\t%s\n' "-h, --help: Prints help"
 }
 parse_commandline()
@@ -121,18 +119,6 @@ parse_commandline()
 			-p*)
 				_arg_gasPrice="${_key##-p}"
 				;;
-
-			-n|--nonce)
-				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
-				_arg_nonce="$2"
-				shift
-				;;
-			--nonce=*)
-				_arg_nonce="${_key##--nonce=}"
-				;;
-			-n*)
-				_arg_nonce="${_key##-n}"
-				;;
 			
 			-h|--help)
 				print_help
@@ -190,9 +176,10 @@ if [ -z "$_arg_data" ]
     _arg_data="0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
 fi
 
-if [ -z "$_arg_nonce" ]
+
+if [ -z "$_arg_tag" ]
   then
-    _arg_nonce="0xde0b6b3a7640000"
+    _arg_tag="latest"
 fi
 
 
@@ -202,4 +189,4 @@ parse_commandline "$@"
 
 # echo "Value of --server: $_arg_server"
 
-curl --data '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{"from":'$_arg_wallet_from',"to":'$_arg_wallet_to',"value":'$_arg_value',"gas":'$_arg_gas',"nonce":'$_arg_nonce'}],"id":0}' -H "Content-Type: application/json" -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_estimateGas","params":[{"from":'$_arg_wallet_from',"to":'$_arg_wallet_to',"value":'$_arg_value'},"'$_arg_tag'"],"id":0}' -H "Content-Type: application/json" -X POST $_arg_server

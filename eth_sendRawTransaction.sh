@@ -21,7 +21,7 @@ print_help()
 	printf '%s\n' "Ethereum JSON RPC API"
 	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-d|--data <arg>] [-h|--help]\n' "$0"
 	printf '\t%s\n' "-i, --id: optional argument (1)"
-	printf '\t%s\n' "-d, --data: optional argument (0xc94770007dda54cF92009BFF0dE90c06F603a09f)"
+	printf '\t%s\n' "-d, --data: optional argument (0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675)"
 	printf '\t%s\n' "-s, --server: optional argument (localhost:8545)"
 	printf '\t%s\n' "-h, --help: Prints help"
 }
@@ -92,7 +92,7 @@ fi
 
 if [ -z "$_arg_data" ]
   then
-    _arg_data="0xc94770007dda54cF92009BFF0dE90c06F603a09f"
+    _arg_data="0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
 fi
 
 if [ -z "$_arg_server" ]
@@ -105,4 +105,4 @@ parse_commandline "$@"
 
 # echo "Value of --id: $_arg_id"
 
-curl --data '{"jsonrpc":"2.0","method":"eth_getBlockTransactionCountByHash","params":["'$_arg_data'"],"id":"'$_arg_id'"}' -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["'$_arg_data'"],"id":"'$_arg_id'"}' -X POST $_arg_server

@@ -105,4 +105,4 @@ parse_commandline "$@"
 
 # echo "Value of --id: $_arg_id"
 
-curl --data '{"jsonrpc":"2.0","method":"eth_getBlockTransactionCountByHash","params":["'$_arg_data'"],"id":"'$_arg_id'"}' -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_getUncleCountByBlockHash","params":["'$_arg_data'"],"id":"'$_arg_id'"}' -X POST $_arg_server
