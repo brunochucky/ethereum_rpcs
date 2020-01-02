@@ -9,14 +9,13 @@ die()
 }
 begins_with_short_option()
 {
-	local first_option all_short_options='sftvh'
+	local first_option all_short_options='idsh'
 	first_option="${1:0:1}"
 	test "$all_short_options" = "${all_short_options/$first_option/}" && return 1 || return 0
 }
 _arg_server=
 _arg_id=
 _arg_data=
-_arg_tag=
 print_help()
 {
 	printf '%s\n' "Ethereum JSON RPC API"
