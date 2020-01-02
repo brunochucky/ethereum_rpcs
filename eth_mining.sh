@@ -19,7 +19,7 @@ print_help()
 {
 	printf '%s\n' "Ethereum JSON RPC API"
 	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-h|--help]\n' "$0"
-	printf '\t%s\n' "-i, --id: optional argument (67)"
+	printf '\t%s\n' "-i, --id: optional argument (71)"
 	printf '\t%s\n' "-s, --server: optional argument (localhost:8545)"
 	printf '\t%s\n' "-h, --help: Prints help"
 }
@@ -73,7 +73,7 @@ parse_commandline()
 
 if [ -z "$_arg_id" ]
   then
-    _arg_id="67"
+    _arg_id="71"
 fi
 
 if [ -z "$_arg_server" ]
@@ -87,4 +87,4 @@ parse_commandline "$@"
 # echo "Value of --id: $_arg_id"
 # echo "Value of --server: $_arg_server"
 
-curl --data '{"jsonrpc":"2.0","method":"net_version","params":[],"id":"'$_arg_id'"}' -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_mining","params":[],"id":"'$_arg_id'"}' -X POST $_arg_server

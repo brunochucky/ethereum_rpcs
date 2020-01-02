@@ -15,11 +15,14 @@ begins_with_short_option()
 }
 _arg_server=
 _arg_id=
+_arg_data=
+_arg_tag=
 print_help()
 {
 	printf '%s\n' "Ethereum JSON RPC API"
 	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-h|--help]\n' "$0"
-	printf '\t%s\n' "-i, --id: optional argument (67)"
+	printf '\t%s\n' "-i, --id: optional argument (1)"
+	printf '\t%s\n' "-d, --data: optional argument (0xc94770007dda54cF92009BFF0dE90c06F603a09f)"
 	printf '\t%s\n' "-s, --server: optional argument (localhost:8545)"
 	printf '\t%s\n' "-h, --help: Prints help"
 }
@@ -39,6 +42,18 @@ parse_commandline()
 				;;
 			-i*)
 				_arg_id="${_key##-i}"
+				;;
+
+			-d|--data)
+				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
+				_arg_data="$2"
+				shift
+				;;
+			--data=*)
+				_arg_data="${_key##--data=}"
+				;;
+			-d*)
+				_arg_data="${_key##-d}"
 				;;
 
 			-s|--server)
@@ -73,7 +88,12 @@ parse_commandline()
 
 if [ -z "$_arg_id" ]
   then
-    _arg_id="67"
+    _arg_id="1"
+fi
+
+if [ -z "$_arg_data" ]
+  then
+    _arg_data="0xc94770007dda54cF92009BFF0dE90c06F603a09f"
 fi
 
 if [ -z "$_arg_server" ]
@@ -85,6 +105,5 @@ fi
 parse_commandline "$@"
 
 # echo "Value of --id: $_arg_id"
-# echo "Value of --server: $_arg_server"
 
-curl --data '{"jsonrpc":"2.0","method":"net_version","params":[],"id":"'$_arg_id'"}' -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_getBlockTransactionCountByHash","params":["'$_arg_data'"],"id":"'$_arg_id'"}' -X POST $_arg_server
