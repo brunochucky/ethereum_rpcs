@@ -9,17 +9,19 @@ die()
 }
 begins_with_short_option()
 {
-	local first_option all_short_options='wtsh'
+	local first_option all_short_options='iwtsh'
 	first_option="${1:0:1}"
 	test "$all_short_options" = "${all_short_options/$first_option/}" && return 1 || return 0
 }
 _arg_server=
 _arg_wallet=
 _arg_tag=
+_arg_id=
 print_help()
 {
 	printf '%s\n' "Ethereum JSON RPC API"
-	printf 'Usage: %s [-w|--wallet <arg>] [-t|--tag <arg>] [-s|--server <arg>] [-h|--help]\n' "$0"
+	printf 'Usage: %s [-i|--id <arg>] [-w|--wallet <arg>] [-t|--tag <arg>] [-s|--server <arg>] [-h|--help]\n' "$0"
+	printf '\t%s\n' "-i, --id: optional argument (1)"
 	printf '\t%s\n' "-w, --wallet: optional argument (0x00E3d1Aa965aAfd61217635E5f99f7c1e567978f)"
 	printf '\t%s\n' "-t, --tag: optional argument (latest)"
 	printf '\t%s\n' "-s, --server: optional argument (localhost:8545)"
@@ -31,6 +33,18 @@ parse_commandline()
 	do
 		_key="$1"
 		case "$_key" in
+			-i|--id)
+				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
+				_arg_id="$2"
+				shift
+				;;
+			--id=*)
+				_arg_id="${_key##--id=}"
+				;;
+			-i*)
+				_arg_id="${_key##-i}"
+				;;
+
 			-w|--wallet)
 				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
 				_arg_wallet="$2"
@@ -42,6 +56,7 @@ parse_commandline()
 			-w*)
 				_arg_wallet="${_key##-w}"
 				;;
+
 			-t|--tag)
 				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
 				_arg_tag="$2"
@@ -53,6 +68,7 @@ parse_commandline()
 			-t*)
 				_arg_tag="${_key##-t}"
 				;;
+
 			-s|--server)
 				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
 				_arg_server="$2"
@@ -83,6 +99,12 @@ parse_commandline()
 }
 
 
+
+if [ -z "$_arg_id" ]
+  then
+    _arg_id="1"
+fi
+
 if [ -z "$_arg_wallet" ]
   then
     _arg_wallet="0x00E3d1Aa965aAfd61217635E5f99f7c1e567978f"
@@ -105,4 +127,4 @@ parse_commandline "$@"
 #echo "Value of --tag: $_arg_tag"
 #echo "Value of --server: $_arg_server"
 
-curl --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["'$_arg_wallet'", "'$_arg_tag'"],"id":1}' -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["'$_arg_wallet'", "'$_arg_tag'"],"id":'$_arg_id'}' -X POST $_arg_server

@@ -9,10 +9,12 @@ die()
 }
 begins_with_short_option()
 {
-	local first_option all_short_options='sftvgpdh'
+	local first_option all_short_options='isftvgpdh'
 	first_option="${1:0:1}"
 	test "$all_short_options" = "${all_short_options/$first_option/}" && return 1 || return 0
 }
+
+_arg_id=
 _arg_server=
 _arg_wallet_from=
 _arg_wallet_to=
@@ -23,7 +25,8 @@ _arg_data=
 print_help()
 {
 	printf '%s\n' "Ethereum JSON RPC API"
-	printf 'Usage: %s [-s|--server <arg>] [-f|--wallet_from <arg>] [-t|--wallet_to <arg>] [-v|--value <arg>] [-h|--help]\n' "$0"
+	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-f|--wallet_from <arg>] [-t|--wallet_to <arg>] [-v|--value <arg>] [-h|--help]\n' "$0"
+	printf '\t%s\n' "-i, --id: optional argument (0)"
 	printf '\t%s\n' "-s, --server: optional argument (localhost:8545)"
 	printf '\t%s\n' "-f, --wallet_from: optional argument (0x6B0c56d1Ad5144b4d37fa6e27DC9afd5C2435c3B)"
 	printf '\t%s\n' "-t, --wallet_to: optional argument (0x00E3d1Aa965aAfd61217635E5f99f7c1e567978f)"
@@ -39,6 +42,18 @@ parse_commandline()
 	do
 		_key="$1"
 		case "$_key" in
+			-i|--id)
+				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
+				_arg_id="$2"
+				shift
+				;;
+			--id=*)
+				_arg_id="${_key##--id=}"
+				;;
+			-i*)
+				_arg_id="${_key##-i}"
+				;;
+
 			-s|--server)
 				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
 				_arg_server="$2"
@@ -138,6 +153,10 @@ parse_commandline()
 }
 
 
+if [ -z "$_arg_id" ]
+  then
+    _arg_id="0"
+fi
 if [ -z "$_arg_server" ]
   then
     _arg_server="localhost:8545"
@@ -188,5 +207,4 @@ fi
 parse_commandline "$@"
 
 # echo "Value of --server: $_arg_server"
-
-curl --data '{"jsonrpc":"2.0","method":"eth_estimateGas","params":[{"from":'$_arg_wallet_from',"to":'$_arg_wallet_to',"value":'$_arg_value'},"'$_arg_tag'"],"id":0}' -H "Content-Type: application/json" -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_estimateGas","params":[{"from":"'$_arg_wallet_from'","to":"'$_arg_wallet_to'","value":"'$_arg_value'","gas":"'$_arg_gas'","gasPrice":"'$_arg_gasPrice'","data":"'$_arg_data'"}],"id":'$_arg_id'}' -H "Content-Type: application/json" -X POST $_arg_server

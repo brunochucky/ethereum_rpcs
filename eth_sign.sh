@@ -20,7 +20,7 @@ _arg_datan=
 print_help()
 {
 	printf '%s\n' "Ethereum JSON RPC API"
-	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-d|--data <arg>] [-h|--help]\n' "$0"
+	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-d|--data <arg>] [-n|--datan <arg>] [-h|--help]\n' "$0"
 	printf '\t%s\n' "-i, --id: optional argument (1)"
 	printf '\t%s\n' "-d, --data: optional argument (0xc94770007dda54cF92009BFF0dE90c06F603a09f)"
 	printf '\t%s\n' "-n, --datan: optional argument (Lorem ipsum dolor sit amet)"
@@ -57,13 +57,13 @@ parse_commandline()
 				_arg_data="${_key##-d}"
 				;;
 
-			-n|--_arg_datan)
+			-n|--datan)
 				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
 				_arg_tag="$2"
 				shift
 				;;
 			--datan=*)
-				_arg_datan="${_key##--_arg_datan=}"
+				_arg_datan="${_key##--datan=}"
 				;;
 			-n*)
 				_arg_datan="${_key##-n}"
@@ -126,4 +126,4 @@ parse_commandline "$@"
 
 # echo "Value of --id: $_arg_id"
 
-curl --data '{"jsonrpc":"2.0","method":"eth_sign","params":["'$_arg_data'","'$_arg_datan'"],"id":"'$_arg_id'"}' -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_sign","params":["'$_arg_data'","'$_arg_datan'"],"id":'$_arg_id'}' -X POST $_arg_server

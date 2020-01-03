@@ -21,7 +21,7 @@ _arg_tag=
 print_help()
 {
 	printf '%s\n' "Ethereum JSON RPC API"
-	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-h|--help]\n' "$0"
+	printf 'Usage: %s [-i|--id <arg>] [-s|--server <arg>] [-d|--data <arg>] [-q|--quantity <arg>] [-t|--tag <arg>] [-h|--help]\n' "$0"
 	printf '\t%s\n' "-i, --id: optional argument (1)"
 	printf '\t%s\n' "-d, --data: optional argument (0x295a70b2de5e3953354a6a8344e616ed314d7251)"
 	printf '\t%s\n' "-q, --quantity: optional argument (0x0)"
@@ -151,4 +151,4 @@ parse_commandline "$@"
 # echo "Value of --quantity: $_arg_qnt"
 # echo "Value of --tag: $_arg_tag"
 
-curl --data '{"jsonrpc":"2.0","method":"eth_getStorageAt","params":["'$_arg_data'","'$_arg_qnt'","'$_arg_tag'"],"id":"'$_arg_id'"}' -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_getStorageAt","params":["'$_arg_data'","'$_arg_qnt'","'$_arg_tag'"],"id":'$_arg_id'}' -X POST $_arg_server

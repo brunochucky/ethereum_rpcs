@@ -87,4 +87,4 @@ parse_commandline "$@"
 # echo "Value of --id: $_arg_id"
 # echo "Value of --server: $_arg_server"
 
-curl --data '{"jsonrpc":"2.0","method":"eth_hashrate","params":[],"id":"'$_arg_id'"}' -X POST $_arg_server
+curl --data '{"jsonrpc":"2.0","method":"eth_hashrate","params":[],"id":'$_arg_id'}' -X POST $_arg_server
